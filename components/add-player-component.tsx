@@ -1,3 +1,4 @@
+"use serve";
 import { CirclePlus } from "lucide-react";
 import {
   Popover,
@@ -18,10 +19,15 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import prismadb from "@/lib/prismadb";
+import { useUsers } from "@/hooks/use-user-query";
+import { useEffect, useState } from "react";
+import { User } from "@prisma/client";
 
 const AddPlayerComponent = () => {
   const { players, addPlayer } = useAddPlayer();
+  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [searchValue, setSearchValue] = useState("");
+  const { data, isLoading, isError } = useUsers();
 
   const formSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -41,12 +47,18 @@ const AddPlayerComponent = () => {
     form.reset();
   };
 
-  const getAllUsers = async () => {
-    const users = await prismadb.user.findMany();
-    console.log(users);
-    return users;
+  useEffect(() => {
+    searchUsers(searchValue);
+  }, [searchValue]);
+
+  const searchUsers = (query: string) => {
+    const filteredUsers = (data?.users || []).filter(
+      (user: { email: string }) =>
+        user.email.toLowerCase().includes(query.toLowerCase())
+    );
+    setSearchResults(filteredUsers);
   };
-  getAllUsers();
+
   return (
     <div>
       <ul className="flex flex-wrap gap-4">
@@ -80,12 +92,31 @@ const AddPlayerComponent = () => {
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input placeholder="Email" {...field} />
+                          <Input
+                            placeholder="Email"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              setSearchValue(e.target.value);
+                            }}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                  <ul className="absolute top-[88%] left-[6%]">
+                    {searchResults.map((user: User) => (
+                      <li
+                        className="group w-[212px] px-2 py-1 hover:bg-background transition bg-foreground border border-1 rounded-md flex flex-wrap justify-center"
+                        key={user.id}
+                      >
+                        <p className="text-center text-sm text-background group-hover:text-foreground transition">
+                          {user.email}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
                   <Button className="absolute top-[49px] right-4">
                     <CirclePlus color="black" />
                   </Button>
