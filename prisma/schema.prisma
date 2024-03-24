@@ -1,0 +1,55 @@
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model GameInvitation {
+    id      String @id @default(auto()) @map("_id") @db.ObjectId
+    game_id String @map("game_id")
+    user_id String @map("user_id")
+    status  String
+
+    @@index([game_id, user_id])
+}
+
+model User {
+    id                String  @id @default(auto()) @map("_id") @db.ObjectId
+    name              String
+    email             String  @unique
+    image             String?
+    rating            Int     @default(0)
+    provider          String
+    providerAccountId String
+    email_verified    Boolean
+    given_name        String
+    family_name       String
+    Game              Game?   @relation(fields: [gameId], references: [id])
+    gameId            String? @db.ObjectId
+}
+
+model Game {
+    id            String   @id @default(auto()) @map("_id") @db.ObjectId
+    players       User[]
+    numberOfSpies Int
+    timer         DateTime?
+    // discloseRole  Boolean
+}
+
+model Followers {
+    id           String @id @default(auto()) @map("_id") @db.ObjectId
+    follower_id  String @map("follower_id")
+    following_id String @map("following_id")
+
+    @@index([follower_id, following_id], name: "unique_follower_following")
+}
+
+model FriendInvitation {
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    sender_id   String @map("sender_id")
+    receiver_id String @map("receiver_id")
+    status      String
+}

@@ -1,0 +1,77 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Button } from "./ui/button";
+import AddPlayerComponent from "./add-player-component";
+import { ListInvitaionComponent } from "./list-invitaion-component";
+// import { useCreateGameMutation } from "@/hooks/use-create-game";
+
+const CreateGameComponent = () => {
+  const formSchema = z.object({
+    numberOfSpies: z.number(),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      numberOfSpies: 0,
+    },
+  });
+
+  const onSubmit = async (values: any) => {
+    values.numberOfSpies = Number(values.numberOfSpies);
+
+    // await mutateAsync(values);
+    console.log(values);
+  };
+
+//   const { mutateAsync } = useCreateGameMutation();
+
+  return (
+    <div>
+      <div className="flex">
+        <AddPlayerComponent />
+      </div>
+      <div className="flex justify-between">
+        <Form {...form}>
+          <form className="w-3/4" onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name="numberOfSpies"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Number of spies</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Number of spies"
+                      {...field}
+                      type="number"
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Enter the number of spies you want to play with
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Submit</Button>
+          </form>
+        </Form>
+        <ListInvitaionComponent />
+      </div>
+    </div>
+  );
+};
+
+export default CreateGameComponent;
