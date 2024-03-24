@@ -3,7 +3,7 @@ import { Game } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
 const getGameFn = async () => {
-  const { data } = await api.get<any>("/api/game");
+  const { data } = await api.get<any>("/api/games");
 
   return data;
 };

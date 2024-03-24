@@ -40,11 +40,12 @@ const AddPlayerComponent = () => {
     },
   });
 
+  //todo: maybe delete this
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     // if (values) {
     //   addPlayer(values.email);
     // }
-    form.reset();
+    // form.reset();
   };
 
   useEffect(() => {
@@ -67,9 +68,7 @@ const AddPlayerComponent = () => {
             className="w-40 h-72 bg-foreground border border-1 rounded-md flex flex-wrap justify-center items-end"
             key={index}
           >
-            <p className="text-center text-sm text-background">
-              {email}
-            </p>
+            <p className="text-center text-sm text-background">{email}</p>
           </li>
         ))}
         <li className="w-40 h-72 bg-foreground/50  border border-1 rounded-md  justify-center items-end">
@@ -112,7 +111,10 @@ const AddPlayerComponent = () => {
                       <li
                         className="group w-[276px] px-2 py-1 hover:bg-background transition bg-foreground border border-1 rounded-md flex flex-wrap justify-center"
                         key={user.id}
-                        onClick={() => addPlayer(user.email)}
+                        onClick={() => {
+                          addPlayer(user.email);
+                          form.reset();
+                        }}
                       >
                         <p className="text-center text-sm text-background group-hover:text-foreground transition">
                           {user.email}

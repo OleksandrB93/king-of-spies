@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useGameQueryKey } from "./use-games-query";
 
 const createGameFn = async (game: any) => {
-  const { data } = await api.post<any>("/api/game", game);
+  const { data } = await api.post<any>("/api/games", game);
 
   return data;
 };

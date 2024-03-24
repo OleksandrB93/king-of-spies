@@ -15,27 +15,33 @@ import { Button } from "./ui/button";
 import AddPlayerComponent from "./add-player-component";
 import { ListInvitaionComponent } from "./list-invitaion-component";
 import { useCreateGameMutation } from "@/hooks/use-create-game";
+import { useAddPlayer } from "@/hooks/useAddPlayer";
 
 const CreateGameComponent = () => {
+  const { players, addPlayer } = useAddPlayer();
+
   const formSchema = z.object({
-    numberOfSpies: z.number(),
+    numberOfSpies: z.string(),
+    playerEmails: z.array(z.string()),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      numberOfSpies: 0,
+      numberOfSpies: "0",
+      playerEmails: players,
     },
   });
 
   const onSubmit = async (values: any) => {
     values.numberOfSpies = Number(values.numberOfSpies);
-
-    // await mutateAsync(values);
+    form.setValue("playerEmails", players);
     console.log(values);
+
+    await mutateAsync(values);
   };
 
-//   const { mutateAsync } = useCreateGameMutation();
+  const { mutateAsync } = useCreateGameMutation();
 
   return (
     <div>
@@ -65,7 +71,7 @@ const CreateGameComponent = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Create</Button>
           </form>
         </Form>
         <ListInvitaionComponent />
