@@ -30,7 +30,7 @@ const AddPlayerComponent = () => {
   const { data, isLoading, isError } = useUsers();
 
   const formSchema = z.object({
-    email: z.string().email("Invalid email address"),
+    email: z.string().email(" "),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,9 +41,9 @@ const AddPlayerComponent = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (values) {
-      addPlayer(values.email);
-    }
+    // if (values) {
+    //   addPlayer(values.email);
+    // }
     form.reset();
   };
 
@@ -62,12 +62,14 @@ const AddPlayerComponent = () => {
   return (
     <div>
       <ul className="flex flex-wrap gap-4">
-        {players.map((player, index) => (
+        {players.map((email, index) => (
           <li
             className="w-40 h-72 bg-foreground border border-1 rounded-md flex flex-wrap justify-center items-end"
             key={index}
           >
-            <p className="text-center text-sm text-background">{player}</p>
+            <p className="text-center text-sm text-background">
+              {email}
+            </p>
           </li>
         ))}
         <li className="w-40 h-72 bg-foreground/50  border border-1 rounded-md  justify-center items-end">
@@ -89,7 +91,7 @@ const AddPlayerComponent = () => {
                     control={form.control}
                     name="email"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="w-full">
                         <FormLabel>Email</FormLabel>
                         <FormControl>
                           <Input
@@ -105,11 +107,12 @@ const AddPlayerComponent = () => {
                       </FormItem>
                     )}
                   />
-                  <ul className="absolute top-[88%] left-[6%]">
+                  <ul className="absolute top-[82%] left-[6%]">
                     {searchResults.map((user: User) => (
                       <li
-                        className="group w-[212px] px-2 py-1 hover:bg-background transition bg-foreground border border-1 rounded-md flex flex-wrap justify-center"
+                        className="group w-[276px] px-2 py-1 hover:bg-background transition bg-foreground border border-1 rounded-md flex flex-wrap justify-center"
                         key={user.id}
+                        onClick={() => addPlayer(user.email)}
                       >
                         <p className="text-center text-sm text-background group-hover:text-foreground transition">
                           {user.email}
@@ -117,9 +120,10 @@ const AddPlayerComponent = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button className="absolute top-[49px] right-4">
+                  {/* // todo!: maybe need delete this button */}
+                  {/* <Button className="absolute top-[49px] right-4">
                     <CirclePlus color="black" />
-                  </Button>
+                  </Button> */}
                 </form>
               </Form>
             </PopoverContent>

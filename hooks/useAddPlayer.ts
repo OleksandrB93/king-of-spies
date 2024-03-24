@@ -2,11 +2,11 @@ import { create } from 'zustand'
 
 interface PlayerStore {
   players: string[];
-  addPlayer: (playerName: string) => void;
+  addPlayer: (playerEmail: string) => void;
 }
 
 export const useAddPlayer = create<PlayerStore>((set) => ({
   players: [],
-  addPlayer: (playerName: string) =>
-    set((state) => ({ players: [...state.players, playerName] })),
+  addPlayer: (playerEmail: string) =>
+    set((state) => ({ players: [...state.players, playerEmail] })),
 }));

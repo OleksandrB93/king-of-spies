@@ -27,13 +27,12 @@ model User {
     email_verified    Boolean
     given_name        String
     family_name       String
-    Game              Game?   @relation(fields: [gameId], references: [id])
     gameId            String? @db.ObjectId
 }
 
 model Game {
-    id            String   @id @default(auto()) @map("_id") @db.ObjectId
-    players       User[]
+    id            String    @id @default(auto()) @map("_id") @db.ObjectId
+    playerIds     String[]
     numberOfSpies Int
     timer         DateTime?
     // discloseRole  Boolean
