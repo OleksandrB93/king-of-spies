@@ -16,9 +16,12 @@ import AddPlayerComponent from "./add-player-component";
 import { ListInvitaionComponent } from "./list-invitaion-component";
 import { useCreateGameMutation } from "@/hooks/use-create-game";
 import { useAddPlayer } from "@/hooks/useAddPlayer";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const CreateGameComponent = () => {
-  const { players, addPlayer } = useAddPlayer();
+  const { players } = useAddPlayer();
+  const router = useRouter();
 
   const formSchema = z.object({
     numberOfSpies: z.string(),
@@ -35,13 +38,17 @@ const CreateGameComponent = () => {
 
   const onSubmit = async (values: any) => {
     values.numberOfSpies = Number(values.numberOfSpies);
-    form.setValue("playerEmails", players);
-    console.log(values);
+    const { game } = await mutateAsync(values);
 
-    await mutateAsync(values);
+    router.push(`/game/${game.id}`);
   };
 
-  const { mutateAsync } = useCreateGameMutation();
+  // add emails array to form
+  useEffect(() => {
+    form.setValue("playerEmails", players);
+  }, [players]);
+
+  const { mutateAsync, isSuccess, isError } = useCreateGameMutation();
 
   return (
     <div>

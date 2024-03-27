@@ -21,5 +21,4 @@ export async function POST(req: Request, res: Response) {
   });
 
   return NextResponse.json({ game: newGame }, { status: 201 });
-  
 }

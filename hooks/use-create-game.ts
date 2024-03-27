@@ -1,6 +1,6 @@
 import { api } from "@/core/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useGameQueryKey } from "./use-games-query";
+import { useGameQueryKey } from "./use-get-game-by-id";
 
 const createGameFn = async (game: any) => {
   const { data } = await api.post<any>("/api/games", game);

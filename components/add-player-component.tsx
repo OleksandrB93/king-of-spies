@@ -19,7 +19,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useUsers } from "@/hooks/use-user-query";
+import { useUsers } from "@/hooks/use-get-users";
 import { useEffect, useState } from "react";
 import { User } from "@prisma/client";
 
@@ -94,6 +94,7 @@ const AddPlayerComponent = () => {
                         <FormLabel>Email</FormLabel>
                         <FormControl>
                           <Input
+                            autoComplete="off"
                             placeholder="Email"
                             {...field}
                             onChange={(e) => {

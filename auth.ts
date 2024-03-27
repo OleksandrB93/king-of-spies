@@ -31,7 +31,6 @@ export const config = {
     //   return token;
     // },
     //redirect to main page /client
-    
 
     async signIn({ profile, account }) {
       const existingUser = await prismadb.user.findUnique({
@@ -44,7 +43,7 @@ export const config = {
           data: {
             email: profile?.email,
             name: profile?.name,
-            image: profile?.image,
+            image: profile?.picture,
             provider: account?.provider,
             providerAccountId: account?.providerAccountId,
             email_verified: profile?.email_verified,

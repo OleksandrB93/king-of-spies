@@ -27,7 +27,6 @@ model User {
     email_verified    Boolean
     given_name        String
     family_name       String
-    gameId            String? @db.ObjectId
 }
 
 model Game {
